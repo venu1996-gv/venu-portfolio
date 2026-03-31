@@ -90,27 +90,39 @@ export default function Portfolio() {
   ];
 
   const theme = {
-    bg: darkMode ? "bg-slate-950" : "bg-gradient-to-b from-slate-50 via-white to-slate-100",
+    bg: darkMode ? "bg-slate-950" : "bg-slate-50",
+    sectionAlt: darkMode ? "bg-slate-900/40" : "bg-white",
     text: darkMode ? "text-slate-100" : "text-slate-900",
-    header: darkMode ? "border-slate-800 bg-slate-950/80" : "border-slate-200/70 bg-white/80",
-    card: darkMode ? "border-slate-800 bg-slate-900 text-slate-100" : "border-slate-200 bg-white text-slate-900",
+    header: darkMode ? "border-slate-800 bg-slate-950/85" : "border-slate-200 bg-white/85",
+    card: darkMode
+      ? "border-slate-800 bg-slate-900 text-slate-100"
+      : "border-slate-200 bg-white text-slate-900",
     subtext: darkMode ? "text-slate-400" : "text-slate-600",
     buttonPrimary: darkMode ? "bg-white text-slate-900" : "bg-slate-900 text-white",
     buttonSecondary: darkMode
       ? "border border-slate-700 bg-slate-900 text-white"
       : "border border-slate-300 bg-white text-slate-800",
     footer: darkMode ? "border-slate-800 bg-slate-950" : "border-slate-200 bg-white",
+    heroGlow: darkMode
+      ? "bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.12),transparent_30%),radial-gradient(circle_at_top_right,rgba(148,163,184,0.12),transparent_35%)]"
+      : "bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.08),transparent_30%),radial-gradient(circle_at_top_right,rgba(148,163,184,0.10),transparent_35%)]",
   };
 
-  const SectionTitle = ({ eyebrow, title, subtitle }) => (
-    <div className="mb-10">
+  const SectionTitle = ({ eyebrow, title, subtitle, center = false }) => (
+    <div className={`mb-10 ${center ? "text-center" : ""}`}>
       {eyebrow && (
         <p className={`mb-3 text-sm font-semibold uppercase tracking-[0.25em] ${theme.subtext}`}>
           {eyebrow}
         </p>
       )}
       <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{title}</h2>
-      {subtitle && <p className={`mt-3 max-w-2xl text-base leading-7 ${theme.subtext}`}>{subtitle}</p>}
+      {subtitle && (
+        <p
+          className={`mt-3 ${center ? "mx-auto" : ""} max-w-2xl text-base leading-7 ${theme.subtext}`}
+        >
+          {subtitle}
+        </p>
+      )}
     </div>
   );
 
@@ -119,7 +131,7 @@ export default function Portfolio() {
       className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium shadow-sm ${
         darkMode
           ? "border border-slate-700 bg-slate-800 text-slate-200"
-          : "border border-slate-200 bg-white text-slate-700"
+          : "border border-slate-200 bg-slate-50 text-slate-700"
       }`}
     >
       {children}
@@ -157,11 +169,11 @@ export default function Portfolio() {
 
           <div className="flex items-center gap-4">
             <nav className={`hidden items-center gap-6 text-sm font-medium md:flex ${theme.subtext}`}>
-              <a href="#about" className="hover:text-current">About</a>
-              <a href="#skills" className="hover:text-current">Skills</a>
-              <a href="#projects" className="hover:text-current">Case Studies</a>
-              <a href="#experience" className="hover:text-current">Experience</a>
-              <a href="#contact" className="hover:text-current">Contact</a>
+              <a href="#about" className="transition hover:text-current">About</a>
+              <a href="#skills" className="transition hover:text-current">Skills</a>
+              <a href="#projects" className="transition hover:text-current">Case Studies</a>
+              <a href="#experience" className="transition hover:text-current">Experience</a>
+              <a href="#contact" className="transition hover:text-current">Contact</a>
             </nav>
 
             <button
@@ -174,11 +186,11 @@ export default function Portfolio() {
         </div>
       </header>
 
-      <section id="home" className="relative overflow-hidden">
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-16 md:grid-cols-2 md:px-10 lg:px-12 lg:py-24">
+      <section id="home" className={`relative overflow-hidden ${theme.heroGlow}`}>
+        <div className="mx-auto grid max-w-7xl items-center gap-14 px-6 py-16 md:grid-cols-2 md:px-10 lg:px-12 lg:py-24">
           <div>
             <p
-              className={`mb-4 inline-flex rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] shadow-sm ${
+              className={`mb-5 inline-flex rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] shadow-sm ${
                 darkMode
                   ? "border border-slate-700 bg-slate-900 text-slate-300"
                   : "border border-slate-200 bg-white text-slate-500"
@@ -187,7 +199,7 @@ export default function Portfolio() {
               AI / ML Portfolio
             </p>
 
-            <h1 className="text-4xl font-bold leading-tight md:text-6xl">
+            <h1 className="max-w-3xl text-4xl font-bold leading-tight md:text-6xl">
               Building intelligent systems for real business impact.
             </h1>
 
@@ -264,23 +276,25 @@ export default function Portfolio() {
         </Card>
       </section>
 
-      <section id="skills" className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12">
-        <SectionTitle
-          eyebrow="Skills"
-          title="Technologies I work with"
-          subtitle="A mix of machine learning, engineering, cloud, and production system skills."
-        />
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {Object.entries(skills).map(([key, values]) => (
-            <Card key={key} className="p-6">
-              <h3 className="mb-4 text-xl font-semibold capitalize">{key}</h3>
-              <div className="flex flex-wrap gap-2">
-                {values.map((item) => (
-                  <Pill key={item}>{item}</Pill>
-                ))}
-              </div>
-            </Card>
-          ))}
+      <section id="skills" className={`${theme.sectionAlt}`}>
+        <div className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12">
+          <SectionTitle
+            eyebrow="Skills"
+            title="Technologies I work with"
+            subtitle="A mix of machine learning, engineering, cloud, and production system skills."
+          />
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {Object.entries(skills).map(([key, values]) => (
+              <Card key={key} className="p-6">
+                <h3 className="mb-4 text-xl font-semibold capitalize">{key}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {values.map((item) => (
+                    <Pill key={item}>{item}</Pill>
+                  ))}
+                </div>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -301,7 +315,7 @@ export default function Portfolio() {
                 ))}
               </div>
               <button
-                className={`mt-6 inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-semibold shadow-md transition hover:-translate-y-0.5 ${theme.buttonPrimary}`}
+                className={`mt-6 inline-flex items-center rounded-2xl px-4 py-2 text-sm font-semibold shadow-md transition hover:-translate-y-0.5 ${theme.buttonPrimary}`}
               >
                 {project.cta}
               </button>
@@ -310,34 +324,38 @@ export default function Portfolio() {
         </div>
       </section>
 
-      <section id="experience" className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12">
-        <SectionTitle
-          eyebrow="Experience"
-          title="Industry experience"
-          subtitle="Building scalable machine learning systems across banking, finance, and digital platforms."
-        />
-        <div className="space-y-6">
-          {experience.map((job) => (
-            <Card key={job.company + job.role} className="p-7">
-              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <h3 className="text-2xl font-semibold">{job.role}</h3>
-                  <p className={`text-lg ${theme.subtext}`}>{job.company}</p>
+      <section id="experience" className={`${theme.sectionAlt}`}>
+        <div className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12">
+          <SectionTitle
+            eyebrow="Experience"
+            title="Industry experience"
+            subtitle="Building scalable machine learning systems across banking, finance, and digital platforms."
+          />
+          <div className="space-y-6">
+            {experience.map((job) => (
+              <Card key={job.company + job.role} className="p-7">
+                <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <h3 className="text-2xl font-semibold">{job.role}</h3>
+                    <p className={`text-lg ${theme.subtext}`}>{job.company}</p>
+                  </div>
+                  <p className={`text-sm font-semibold uppercase tracking-wider ${theme.subtext}`}>
+                    {job.period}
+                  </p>
                 </div>
-                <p className={`text-sm font-semibold uppercase tracking-wider ${theme.subtext}`}>
-                  {job.period}
-                </p>
-              </div>
-              <ul className={`mt-5 space-y-3 ${theme.subtext}`}>
-                {job.points.map((point) => (
-                  <li key={point} className="flex gap-3">
-                    <span className={`mt-2 h-2 w-2 rounded-full ${darkMode ? "bg-white" : "bg-slate-900"}`} />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          ))}
+                <ul className={`mt-5 space-y-3 ${theme.subtext}`}>
+                  {job.points.map((point) => (
+                    <li key={point} className="flex gap-3">
+                      <span
+                        className={`mt-2 h-2 w-2 rounded-full ${darkMode ? "bg-white" : "bg-slate-900"}`}
+                      />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
