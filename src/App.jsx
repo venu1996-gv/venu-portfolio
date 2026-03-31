@@ -6,9 +6,7 @@ export default function Portfolio() {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setDarkMode(true);
-    }
+    if (savedTheme === "dark") setDarkMode(true);
   }, []);
 
   useEffect(() => {
@@ -94,21 +92,14 @@ export default function Portfolio() {
   const theme = {
     bg: darkMode ? "bg-slate-950" : "bg-gradient-to-b from-slate-50 via-white to-slate-100",
     text: darkMode ? "text-slate-100" : "text-slate-900",
-    header: darkMode
-      ? "border-slate-800 bg-slate-950/80"
-      : "border-slate-200/70 bg-white/80",
-    card: darkMode
-      ? "border-slate-800 bg-slate-900 text-slate-100"
-      : "border-slate-200 bg-white text-slate-900",
+    header: darkMode ? "border-slate-800 bg-slate-950/80" : "border-slate-200/70 bg-white/80",
+    card: darkMode ? "border-slate-800 bg-slate-900 text-slate-100" : "border-slate-200 bg-white text-slate-900",
     subtext: darkMode ? "text-slate-400" : "text-slate-600",
-    buttonPrimary: darkMode
-      ? "bg-white text-slate-900"
-      : "bg-slate-900 text-white",
+    buttonPrimary: darkMode ? "bg-white text-slate-900" : "bg-slate-900 text-white",
     buttonSecondary: darkMode
       ? "border border-slate-700 bg-slate-900 text-white"
       : "border border-slate-300 bg-white text-slate-800",
     footer: darkMode ? "border-slate-800 bg-slate-950" : "border-slate-200 bg-white",
-    contact: darkMode ? "bg-slate-900" : "bg-slate-900",
   };
 
   const SectionTitle = ({ eyebrow, title, subtitle }) => (
@@ -119,11 +110,7 @@ export default function Portfolio() {
         </p>
       )}
       <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{title}</h2>
-      {subtitle && (
-        <p className={`mt-3 max-w-2xl text-base leading-7 ${theme.subtext}`}>
-          {subtitle}
-        </p>
-      )}
+      {subtitle && <p className={`mt-3 max-w-2xl text-base leading-7 ${theme.subtext}`}>{subtitle}</p>}
     </div>
   );
 
@@ -147,6 +134,19 @@ export default function Portfolio() {
     </div>
   );
 
+  const ActionButton = ({ href, children, primary = false }) => (
+    <a
+      href={href}
+      target={href.startsWith("http") || href.endsWith(".pdf") ? "_blank" : undefined}
+      rel={href.startsWith("http") || href.endsWith(".pdf") ? "noreferrer" : undefined}
+      className={`inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 ${
+        primary ? theme.buttonPrimary : theme.buttonSecondary
+      }`}
+    >
+      {children}
+    </a>
+  );
+
   return (
     <div className={`min-h-screen transition-colors duration-300 ${theme.bg} ${theme.text}`}>
       <header className={`sticky top-0 z-50 border-b backdrop-blur ${theme.header}`}>
@@ -166,9 +166,9 @@ export default function Portfolio() {
 
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className={`rounded-2xl px-4 py-2 text-sm font-semibold shadow-sm transition ${theme.buttonSecondary}`}
+              className={`inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-semibold shadow-sm transition ${theme.buttonSecondary}`}
             >
-              {darkMode ? "Light Mode" : "Dark Mode"}
+              {darkMode ? "Light" : "Dark"}
             </button>
           </div>
         </div>
@@ -203,36 +203,18 @@ export default function Portfolio() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noreferrer"
-                className={`rounded-2xl px-5 py-3 text-sm font-semibold shadow-lg transition hover:-translate-y-0.5 ${theme.buttonPrimary}`}
-              >
+              <ActionButton href="/resume.pdf" primary>
                 Download Resume
-              </a>
-              <a
-                href="mailto:gattinenivenugopal2@gmail.com"
-                className={`rounded-2xl px-5 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 ${theme.buttonSecondary}`}
-              >
+              </ActionButton>
+              <ActionButton href="mailto:gattinenivenugopal2@gmail.com">
                 Contact Me
-              </a>
-              <a
-                href="https://github.com/venu1996-gv"
-                target="_blank"
-                rel="noreferrer"
-                className={`rounded-2xl px-5 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 ${theme.buttonSecondary}`}
-              >
+              </ActionButton>
+              <ActionButton href="https://github.com/venu1996-gv">
                 GitHub
-              </a>
-              <a
-                href="https://www.linkedin.com/in/venu-gopal-gattineni-942246263"
-                target="_blank"
-                rel="noreferrer"
-                className={`rounded-2xl px-5 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 ${theme.buttonSecondary}`}
-              >
+              </ActionButton>
+              <ActionButton href="https://www.linkedin.com/in/venu-gopal-gattineni-942246263">
                 LinkedIn
-              </a>
+              </ActionButton>
             </div>
 
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
@@ -318,7 +300,9 @@ export default function Portfolio() {
                   <Pill key={tag}>{tag}</Pill>
                 ))}
               </div>
-              <button className={`mt-6 inline-flex rounded-2xl px-4 py-2 text-sm font-semibold shadow-md transition hover:-translate-y-0.5 ${theme.buttonPrimary}`}>
+              <button
+                className={`mt-6 inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-semibold shadow-md transition hover:-translate-y-0.5 ${theme.buttonPrimary}`}
+              >
                 {project.cta}
               </button>
             </Card>
@@ -391,7 +375,7 @@ export default function Portfolio() {
       </section>
 
       <section id="contact" className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12">
-        <div className={`rounded-[2rem] px-8 py-14 text-center text-white shadow-2xl ${theme.contact}`}>
+        <div className="rounded-[2rem] bg-slate-900 px-8 py-14 text-center text-white shadow-2xl">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">
             Contact
           </p>
@@ -402,17 +386,12 @@ export default function Portfolio() {
             I’m open to AI/ML Engineer, Machine Learning Developer, and data-driven engineering opportunities.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:-translate-y-0.5"
-            >
+            <ActionButton href="/resume.pdf" primary>
               Download Resume
-            </a>
+            </ActionButton>
             <a
               href="mailto:gattinenivenugopal2@gmail.com"
-              className="rounded-2xl border border-slate-600 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 rounded-2xl border border-slate-600 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
             >
               Email Me
             </a>
@@ -420,7 +399,7 @@ export default function Portfolio() {
               href="https://github.com/venu1996-gv"
               target="_blank"
               rel="noreferrer"
-              className="rounded-2xl border border-slate-600 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 rounded-2xl border border-slate-600 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
             >
               GitHub
             </a>
@@ -429,16 +408,31 @@ export default function Portfolio() {
       </section>
 
       <footer className={`border-t ${theme.footer}`}>
-        <div className={`mx-auto flex max-w-7xl flex-col gap-3 px-6 py-8 text-sm md:flex-row md:items-center md:justify-between md:px-10 lg:px-12 ${theme.subtext}`}>
+        <div
+          className={`mx-auto flex max-w-7xl flex-col gap-3 px-6 py-8 text-sm md:flex-row md:items-center md:justify-between md:px-10 lg:px-12 ${theme.subtext}`}
+        >
           <p>© 2026 Venu Gopal Gattineni. All rights reserved.</p>
           <div className="flex gap-4">
-            <a href="https://github.com/venu1996-gv" target="_blank" rel="noreferrer" className="hover:text-current">
+            <a
+              href="https://github.com/venu1996-gv"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 hover:text-current"
+            >
               GitHub
             </a>
-            <a href="https://www.linkedin.com/in/venu-gopal-gattineni-942246263" target="_blank" rel="noreferrer" className="hover:text-current">
+            <a
+              href="https://www.linkedin.com/in/venu-gopal-gattineni-942246263"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 hover:text-current"
+            >
               LinkedIn
             </a>
-            <a href="mailto:gattinenivenugopal2@gmail.com" className="hover:text-current">
+            <a
+              href="mailto:gattinenivenugopal2@gmail.com"
+              className="inline-flex items-center gap-1 hover:text-current"
+            >
               Email
             </a>
           </div>
