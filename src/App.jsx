@@ -1,5 +1,19 @@
+import { useEffect, useState } from "react";
+
 export default function Portfolio() {
   const profileImage = "/profile.jpg";
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setDarkMode(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
 
   const skills = {
     languages: ["Python", "SQL", "Bash", "Java"],
@@ -77,50 +91,129 @@ export default function Portfolio() {
     },
   ];
 
-  const SectionTitle = ({ children }) => (
-    <div className="mb-8">
-      <h2 className="text-3xl md:text-4xl font-bold tracking-tight">{children}</h2>
-      <div className="mt-3 h-1 w-20 rounded-full bg-slate-900" />
+  const theme = {
+    bg: darkMode ? "bg-slate-950" : "bg-gradient-to-b from-slate-50 via-white to-slate-100",
+    text: darkMode ? "text-slate-100" : "text-slate-900",
+    header: darkMode
+      ? "border-slate-800 bg-slate-950/80"
+      : "border-slate-200/70 bg-white/80",
+    card: darkMode
+      ? "border-slate-800 bg-slate-900 text-slate-100"
+      : "border-slate-200 bg-white text-slate-900",
+    subtext: darkMode ? "text-slate-400" : "text-slate-600",
+    buttonPrimary: darkMode
+      ? "bg-white text-slate-900"
+      : "bg-slate-900 text-white",
+    buttonSecondary: darkMode
+      ? "border border-slate-700 bg-slate-900 text-white"
+      : "border border-slate-300 bg-white text-slate-800",
+    footer: darkMode ? "border-slate-800 bg-slate-950" : "border-slate-200 bg-white",
+    contact: darkMode ? "bg-slate-900" : "bg-slate-900",
+  };
+
+  const SectionTitle = ({ eyebrow, title, subtitle }) => (
+    <div className="mb-10">
+      {eyebrow && (
+        <p className={`mb-3 text-sm font-semibold uppercase tracking-[0.25em] ${theme.subtext}`}>
+          {eyebrow}
+        </p>
+      )}
+      <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{title}</h2>
+      {subtitle && (
+        <p className={`mt-3 max-w-2xl text-base leading-7 ${theme.subtext}`}>
+          {subtitle}
+        </p>
+      )}
     </div>
   );
 
   const Pill = ({ children }) => (
-    <span className="inline-flex items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-sm font-medium text-slate-700 shadow-sm">
+    <span
+      className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium shadow-sm ${
+        darkMode
+          ? "border border-slate-700 bg-slate-800 text-slate-200"
+          : "border border-slate-200 bg-white text-slate-700"
+      }`}
+    >
       {children}
     </span>
   );
 
+  const Card = ({ children, className = "" }) => (
+    <div
+      className={`rounded-3xl border shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl ${theme.card} ${className}`}
+    >
+      {children}
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 md:grid-cols-2 md:px-10 lg:px-12 lg:py-24">
-          <div className="flex flex-col justify-center">
-            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
+    <div className={`min-h-screen transition-colors duration-300 ${theme.bg} ${theme.text}`}>
+      <header className={`sticky top-0 z-50 border-b backdrop-blur ${theme.header}`}>
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10 lg:px-12">
+          <a href="#home" className="text-lg font-bold tracking-tight">
+            Venu Gopal
+          </a>
+
+          <div className="flex items-center gap-4">
+            <nav className={`hidden items-center gap-6 text-sm font-medium md:flex ${theme.subtext}`}>
+              <a href="#about" className="hover:text-current">About</a>
+              <a href="#skills" className="hover:text-current">Skills</a>
+              <a href="#projects" className="hover:text-current">Case Studies</a>
+              <a href="#experience" className="hover:text-current">Experience</a>
+              <a href="#contact" className="hover:text-current">Contact</a>
+            </nav>
+
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className={`rounded-2xl px-4 py-2 text-sm font-semibold shadow-sm transition ${theme.buttonSecondary}`}
+            >
+              {darkMode ? "Light Mode" : "Dark Mode"}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section id="home" className="relative overflow-hidden">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-16 md:grid-cols-2 md:px-10 lg:px-12 lg:py-24">
+          <div>
+            <p
+              className={`mb-4 inline-flex rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] shadow-sm ${
+                darkMode
+                  ? "border border-slate-700 bg-slate-900 text-slate-300"
+                  : "border border-slate-200 bg-white text-slate-500"
+              }`}
+            >
               AI / ML Portfolio
             </p>
+
             <h1 className="text-4xl font-bold leading-tight md:text-6xl">
-              Venu Gopal Gattineni
+              Building intelligent systems for real business impact.
             </h1>
-            <p className="mt-4 text-xl font-semibold text-slate-700">
-              AI/ML Engineer | Machine Learning Developer | Data-Driven Problem Solver
+
+            <p className="mt-5 text-xl font-semibold">Venu Gopal Gattineni</p>
+            <p className={`mt-2 text-base font-medium md:text-lg ${theme.subtext}`}>
+              AI/ML Engineer · Machine Learning Developer · Data-Driven Problem Solver
             </p>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
+
+            <p className={`mt-6 max-w-2xl text-base leading-8 md:text-lg ${theme.subtext}`}>
               AI/ML Engineer with 6+ years of experience building scalable machine learning
-              solutions across fintech and digital payments. My work focuses on fraud detection,
-              credit risk scoring, NLP, recommendation systems, MLOps, and real-time model inference.
+              solutions across fintech and digital payments, with strong focus on fraud detection,
+              credit risk scoring, NLP, recommendation systems, MLOps, and real-time inference.
             </p>
+
             <div className="mt-8 flex flex-wrap gap-4">
               <a
                 href="/resume.pdf"
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5"
+                className={`rounded-2xl px-5 py-3 text-sm font-semibold shadow-lg transition hover:-translate-y-0.5 ${theme.buttonPrimary}`}
               >
                 Download Resume
               </a>
               <a
                 href="mailto:gattinenivenugopal2@gmail.com"
-                className="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5"
+                className={`rounded-2xl px-5 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 ${theme.buttonSecondary}`}
               >
                 Contact Me
               </a>
@@ -128,165 +221,184 @@ export default function Portfolio() {
                 href="https://github.com/venu1996-gv"
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5"
+                className={`rounded-2xl px-5 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 ${theme.buttonSecondary}`}
               >
-                View GitHub
+                GitHub
               </a>
               <a
                 href="https://www.linkedin.com/in/venu-gopal-gattineni-942246263"
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5"
+                className={`rounded-2xl px-5 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 ${theme.buttonSecondary}`}
               >
-                View LinkedIn
+                LinkedIn
               </a>
+            </div>
+
+            <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              <Card className="p-5">
+                <p className={`text-sm uppercase tracking-widest ${theme.subtext}`}>Experience</p>
+                <p className="mt-2 text-3xl font-bold">6+</p>
+                <p className={`mt-1 text-sm ${theme.subtext}`}>Years in AI/ML engineering</p>
+              </Card>
+              <Card className="p-5">
+                <p className={`text-sm uppercase tracking-widest ${theme.subtext}`}>Focus</p>
+                <p className="mt-2 text-xl font-bold">Fraud · NLP · Risk</p>
+                <p className={`mt-1 text-sm ${theme.subtext}`}>High-impact business use cases</p>
+              </Card>
+              <Card className="p-5">
+                <p className={`text-sm uppercase tracking-widest ${theme.subtext}`}>Stack</p>
+                <p className="mt-2 text-xl font-bold">AWS · Docker · MLflow</p>
+                <p className={`mt-1 text-sm ${theme.subtext}`}>Production-ready ML systems</p>
+              </Card>
             </div>
           </div>
 
-          <div className="grid gap-6">
-            <div className="mx-auto w-full max-w-sm rounded-[2rem] bg-white p-4 shadow-2xl ring-1 ring-slate-200">
+          <div className="flex justify-center">
+            <div className={`w-full max-w-md rounded-[2rem] border p-4 shadow-2xl ${theme.card}`}>
               <img
                 src={profileImage}
                 alt="Venu Gopal Gattineni"
-                className="h-auto w-full rounded-[1.5rem] object-cover"
+                className="w-full rounded-[1.5rem] object-cover"
               />
-            </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-3xl bg-slate-900 p-6 text-white shadow-xl">
-                <p className="text-sm uppercase tracking-widest text-slate-300">Experience</p>
-                <p className="mt-3 text-4xl font-bold">6+ Years</p>
-                <p className="mt-2 text-sm text-slate-300">
-                  AI/ML systems across fintech and payment platforms
-                </p>
-              </div>
-              <div className="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-slate-200">
-                <p className="text-sm uppercase tracking-widest text-slate-500">Specialties</p>
-                <p className="mt-3 text-xl font-bold">Fraud, NLP, Risk, Recsys</p>
-                <p className="mt-2 text-sm text-slate-600">
-                  Production machine learning with real business impact
-                </p>
-              </div>
-              <div className="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-slate-200">
-                <p className="text-sm uppercase tracking-widest text-slate-500">Cloud & MLOps</p>
-                <p className="mt-3 text-xl font-bold">AWS • Docker • K8s • MLflow</p>
-                <p className="mt-2 text-sm text-slate-600">
-                  Model training, deployment, monitoring, and lifecycle automation
-                </p>
-              </div>
-              <div className="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-slate-200">
-                <p className="text-sm uppercase tracking-widest text-slate-500">Location</p>
-                <p className="mt-3 text-xl font-bold">Pennsylvania, USA</p>
-                <p className="mt-2 text-sm text-slate-600">Open to remote opportunities</p>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12">
-        <SectionTitle>About Me</SectionTitle>
-        <div className="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-200">
-          <p className="text-lg leading-8 text-slate-700">
-            I enjoy building machine learning systems that solve real business problems. My background includes fraud detection, credit risk scoring, customer intelligence, NLP automation, and recommendation engines. I work across the full pipeline from data preparation and feature engineering to model deployment, monitoring, and continuous improvement.
+      <section id="about" className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12">
+        <SectionTitle
+          eyebrow="About"
+          title="Turning data into practical intelligence"
+          subtitle="I enjoy designing machine learning systems that solve real-world business problems."
+        />
+        <Card className="p-8 md:p-10">
+          <p className={`text-lg leading-8 ${theme.subtext}`}>
+            My background includes fraud detection, credit risk scoring, recommendation systems,
+            customer intelligence, NLP automation, and MLOps. I work across the full machine
+            learning lifecycle, from data preparation and feature engineering to deployment,
+            monitoring, and continuous optimization in production environments.
           </p>
-        </div>
+        </Card>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-16 md:px-10 lg:px-12">
-        <SectionTitle>Skills</SectionTitle>
+      <section id="skills" className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12">
+        <SectionTitle
+          eyebrow="Skills"
+          title="Technologies I work with"
+          subtitle="A mix of machine learning, engineering, cloud, and production system skills."
+        />
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {Object.entries(skills).map(([key, values]) => (
-            <div key={key} className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <Card key={key} className="p-6">
               <h3 className="mb-4 text-xl font-semibold capitalize">{key}</h3>
               <div className="flex flex-wrap gap-2">
                 {values.map((item) => (
                   <Pill key={item}>{item}</Pill>
                 ))}
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-16 md:px-10 lg:px-12">
-        <SectionTitle>Professional Case Studies</SectionTitle>
+      <section id="projects" className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12">
+        <SectionTitle
+          eyebrow="Case Studies"
+          title="Professional AI/ML work highlights"
+          subtitle="Experience-based portfolio case studies built from real industry work."
+        />
         <div className="grid gap-6 md:grid-cols-2">
           {projects.map((project) => (
-            <div key={project.title} className="rounded-3xl bg-white p-7 shadow-sm ring-1 ring-slate-200">
+            <Card key={project.title} className="p-7">
               <h3 className="text-2xl font-semibold">{project.title}</h3>
-              <p className="mt-4 leading-7 text-slate-600">{project.desc}</p>
+              <p className={`mt-4 leading-7 ${theme.subtext}`}>{project.desc}</p>
               <div className="mt-5 flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
                   <Pill key={tag}>{tag}</Pill>
                 ))}
               </div>
-              <button className="mt-6 inline-flex rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white opacity-95">
+              <button className={`mt-6 inline-flex rounded-2xl px-4 py-2 text-sm font-semibold shadow-md transition hover:-translate-y-0.5 ${theme.buttonPrimary}`}>
                 {project.cta}
               </button>
-            </div>
+            </Card>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-16 md:px-10 lg:px-12">
-        <SectionTitle>Experience</SectionTitle>
+      <section id="experience" className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12">
+        <SectionTitle
+          eyebrow="Experience"
+          title="Industry experience"
+          subtitle="Building scalable machine learning systems across banking, finance, and digital platforms."
+        />
         <div className="space-y-6">
           {experience.map((job) => (
-            <div key={job.company + job.role} className="rounded-3xl bg-white p-7 shadow-sm ring-1 ring-slate-200">
+            <Card key={job.company + job.role} className="p-7">
               <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div>
                   <h3 className="text-2xl font-semibold">{job.role}</h3>
-                  <p className="text-lg text-slate-600">{job.company}</p>
+                  <p className={`text-lg ${theme.subtext}`}>{job.company}</p>
                 </div>
-                <p className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+                <p className={`text-sm font-semibold uppercase tracking-wider ${theme.subtext}`}>
                   {job.period}
                 </p>
               </div>
-              <ul className="mt-5 space-y-3 text-slate-700">
+              <ul className={`mt-5 space-y-3 ${theme.subtext}`}>
                 {job.points.map((point) => (
                   <li key={point} className="flex gap-3">
-                    <span className="mt-2 h-2 w-2 rounded-full bg-slate-900" />
+                    <span className={`mt-2 h-2 w-2 rounded-full ${darkMode ? "bg-white" : "bg-slate-900"}`} />
                     <span>{point}</span>
                   </li>
                 ))}
               </ul>
-            </div>
+            </Card>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-16 md:px-10 lg:px-12">
-        <SectionTitle>Education & Certifications</SectionTitle>
+      <section className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12">
+        <SectionTitle
+          eyebrow="Education"
+          title="Education & Certifications"
+          subtitle="Formal education and continuous learning in AI, ML, and applied engineering."
+        />
         <div className="grid gap-6 md:grid-cols-2">
-          <div className="rounded-3xl bg-white p-7 shadow-sm ring-1 ring-slate-200">
+          <Card className="p-7">
             <h3 className="text-2xl font-semibold">Education</h3>
-            <div className="mt-5 space-y-4 text-slate-700">
+            <div className={`mt-5 space-y-5 ${theme.subtext}`}>
               <div>
-                <p className="font-semibold">Master’s in Information Technology</p>
+                <p className="font-semibold text-current">Master’s in Information Technology</p>
                 <p>University of North America</p>
-                <p className="text-sm text-slate-500">Graduated: June 2025</p>
+                <p className="text-sm">Graduated: June 2025</p>
               </div>
               <div>
-                <p className="font-semibold">Bachelor’s in Mechanical Engineering</p>
+                <p className="font-semibold text-current">Bachelor’s in Mechanical Engineering</p>
                 <p>Tirumala Engineering College</p>
-                <p className="text-sm text-slate-500">Graduated: December 2017</p>
+                <p className="text-sm">Graduated: December 2017</p>
               </div>
             </div>
-          </div>
-          <div className="rounded-3xl bg-white p-7 shadow-sm ring-1 ring-slate-200">
+          </Card>
+
+          <Card className="p-7">
             <h3 className="text-2xl font-semibold">Certifications</h3>
-            <ul className="mt-5 space-y-3 text-slate-700">
+            <ul className={`mt-5 space-y-3 ${theme.subtext}`}>
               <li>Complete Computer Vision Bootcamp with PyTorch & TensorFlow</li>
               <li>Complete Data Science, Machine Learning, DL, NLP Bootcamp</li>
             </ul>
-          </div>
+          </Card>
         </div>
       </section>
 
-      <section className="border-t border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-16 text-center md:px-10 lg:px-12">
-          <h2 className="text-3xl font-bold">Let’s Build Something Impactful</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600">
+      <section id="contact" className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12">
+        <div className={`rounded-[2rem] px-8 py-14 text-center text-white shadow-2xl ${theme.contact}`}>
+          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">
+            Contact
+          </p>
+          <h2 className="mt-4 text-3xl font-bold md:text-4xl">
+            Let’s build something impactful
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-slate-300">
             I’m open to AI/ML Engineer, Machine Learning Developer, and data-driven engineering opportunities.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -294,13 +406,13 @@ export default function Portfolio() {
               href="/resume.pdf"
               target="_blank"
               rel="noreferrer"
-              className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm"
+              className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:-translate-y-0.5"
             >
               Download Resume
             </a>
             <a
               href="mailto:gattinenivenugopal2@gmail.com"
-              className="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-lg"
+              className="rounded-2xl border border-slate-600 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
             >
               Email Me
             </a>
@@ -308,13 +420,30 @@ export default function Portfolio() {
               href="https://github.com/venu1996-gv"
               target="_blank"
               rel="noreferrer"
-              className="rounded-2xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm"
+              className="rounded-2xl border border-slate-600 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
             >
-              GitHub Profile
+              GitHub
             </a>
           </div>
         </div>
       </section>
+
+      <footer className={`border-t ${theme.footer}`}>
+        <div className={`mx-auto flex max-w-7xl flex-col gap-3 px-6 py-8 text-sm md:flex-row md:items-center md:justify-between md:px-10 lg:px-12 ${theme.subtext}`}>
+          <p>© 2026 Venu Gopal Gattineni. All rights reserved.</p>
+          <div className="flex gap-4">
+            <a href="https://github.com/venu1996-gv" target="_blank" rel="noreferrer" className="hover:text-current">
+              GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/venu-gopal-gattineni-942246263" target="_blank" rel="noreferrer" className="hover:text-current">
+              LinkedIn
+            </a>
+            <a href="mailto:gattinenivenugopal2@gmail.com" className="hover:text-current">
+              Email
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
